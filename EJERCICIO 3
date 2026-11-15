@@ -1,0 +1,111 @@
+Funcion fase = ValidarFase
+	Definir fase Como Entero
+	Escribir "Seleccione la fase del cultivo:"
+	Escribir "1. Crecimiento"
+	Escribir "2. Floracion"
+	Leer fase
+	
+Mientras fase < 1 O fase >2 Hacer
+	Escribir "Fase no valida. Ingrese 1 o 2:"
+Leer fase
+	FinMientras
+FinFuncion
+
+Funcion ec = ValidarEC
+    Definir ec Como Real
+    Escribir "Ingrese la concentracion EC:"
+    Leer ec
+	
+    Mientras ec <= 0 Hacer
+Escribir "Error. La EC debe ser positiva:"
+	Leer ec
+    FinMientras
+FinFuncion
+
+Funcion adicional = CalcularAjusteEC(fase, ec)
+    Definir adicional Como Real
+    adicional = 0
+	
+    Si fase = 1 Y ec > 1.8 Entonces
+        adicional = 4000
+    FinSi
+	
+    Si fase = 2 Y ec < 1.9 Entonces
+        adicional = 6000
+    FinSi
+FinFuncion
+
+Funcion costo = CalcularCostoModulo(fase, ec)
+    Definir base, adicional Como Real
+	
+    Si fase = 1 Entonces
+        base = 15000
+    Sino
+        base = 22000
+    FinSi
+	
+    adicional = CalcularAjusteEC(fase, ec)
+    costo = base + adicional
+FinFuncion
+
+SubProceso ProcesarModulo(fase, ec, gasto_total Por Referencia, mod_crec Por Referencia, mod_flor Por Referencia, alertas Por Referencia)
+    Definir costo, adicional Como Real
+	
+    costo = CalcularCostoModulo(fase, ec)
+    adicional = CalcularAjusteEC(fase, ec)
+	
+    gasto_total = gasto_total + costo
+	
+    Si fase = 1 Entonces
+        mod_crec = mod_crec + 1
+    Sino
+        mod_flor = mod_flor + 1
+    FinSi
+	
+    Si adicional > 0 Entonces
+        alertas = alertas + 1
+    FinSi
+	
+    Escribir "Costo del modulo: $", costo
+FinSubProceso
+
+SubProceso MostrarReporte(gasto_total, mod_crec, mod_flor, alertas)
+    Escribir " "
+    Escribir "===== REPORTE AMBIENTAL ====="
+    Escribir "Gasto total: $", gasto_total
+    Escribir "Modulos de crecimiento: ", mod_crec
+    Escribir "Modulos de floracion: ", mod_flor
+    Escribir "Intervenciones realizadas: ", alertas
+FinSubProceso
+
+Algoritmo EcoCultivosDelValle
+    Definir opcion, fase Como Entero
+    Definir ec, gasto_total Como Real
+    Definir mod_crec, mod_flor, alertas Como Entero
+	
+    gasto_total = 0
+    mod_crec = 0
+    mod_flor = 0
+    alertas = 0
+	
+    Repetir
+	Escribir "ECOCULTIVOS DEL VALLE"
+	Escribir "1. Registrar medicion de modulo"
+	Escribir "2. Consultar reporte ambiental"
+	Escribir "3. Apagar sistema"
+	Escribir "Seleccione una opcion:"
+	Leer opcion
+	Segun opcion Hacer
+	1:
+	fase = ValidarFase
+	ec = ValidarEC
+	ProcesarModulo(fase, ec, gasto_total, mod_crec, mod_flor, alertas)
+	2:
+	MostrarReporte(gasto_total, mod_crec, mod_flor, alertas)
+	3:
+	Escribir "Apagando sistema..."
+De Otro Modo:
+Escribir "Opcion no valida."
+	FinSegun
+    Hasta Que opcion = 3
+FinAlgoritmo
