@@ -1,0 +1,41 @@
+SubProceso SimularCredito(col_monto Por Referencia, col_intereses Por Referencia, cant_pequenos Por Referencia, cant_medianos Por Referencia)
+	Definir RegistrarCredito Como Logica
+    Definir tipo Como Entero
+    Definir monto, interes, cuota Como Real
+	escribir tipo = LeerEntero "Tipo de productor (1. Pequeno, 2. Mediano):", 1, 2
+	monto = ValidarMonto
+    interes = CalcularInteresTotal 
+    cuota = CalcularCuotaMensual
+   escribir RegistrarCredito
+    Escribir "Intereses del ano: $", interes
+    Escribir "Cuota mensual aproximada: $", cuota
+FinSubProceso
+
+SubProceso MostrarConsolidado(col_monto, col_intereses, cant_pequenos, cant_medianos)
+    Escribir "Consolidado de solicitudes"
+    Escribir "Capital total desembolsado: $", col_monto
+    Escribir "Ganancia estimada por intereses: $", col_intereses
+    Escribir "Creditos de pequenos productores: ", cant_pequenos
+    Escribir "Creditos de medianos productores: ", cant_medianos
+FinSubProceso
+
+Algoritmo BancoAgrario
+    Definir opcion, cant_pequenos, cant_medianos Como Entero
+    Definir col_monto, col_intereses Como Real
+    col_monto = 0
+    col_intereses = 0
+    cant_pequenos = 0
+    cant_medianos = 0
+    Repetir
+Escribir "BancoAgrario"
+Escribir "1. Simular credito | 2. Ver consolidado de solicitudes | 3. Salir"
+Segun opcion Hacer
+	1:
+	SimularCredito(col_monto, col_intereses, cant_pequenos, cant_medianos)
+	2:
+	MostrarConsolidado(col_monto, col_intereses, cant_pequenos, cant_medianos)
+	3:
+Escribir "Programa cerrado."
+        FinSegun
+    Hasta Que opcion = 3
+FinAlgoritmo
